@@ -16,13 +16,14 @@ Protection against dynamic despawning being mistaken for AI death
 
 The default TLL prefab is configured around a 500 m player activation/despawn range and a 50 m AI leash, but these values can be adjusted by the scenario maker.
 
-IMPORTANT — Scenario Setup Requirements
+
+!!!IMPORTANT — Scenario Setup Requirements!!!
 
 Simply placing TLL_SpawnArea.et into a scenario is not enough.
 
 The scenario itself needs the appropriate game-mode and AI/navigation infrastructure for Scenario Framework AI to function correctly.
 
-1. Game Mode
+1. Game Mode:
 
 The tested setup uses:
 
@@ -37,23 +38,25 @@ For the tested setup:
 Dynamic Despawn: Enabled
 Update Rate: 4
 
-GameMode_Plain + SCR_GameModeSFManager is the combination used and validated during development of TLL Spawn System.
+-GameMode_Plain + SCR_GameModeSFManager is the combination used and validated during development of TLL Spawn System.
 
-2. Faction Manager
+
+2. Faction Manager:
 
 Your scenario needs a Faction Manager containing the factions used by your scenario.
 
 For example, our vanilla US/USSR test scenario uses:
 
-FactionManager_USxUSSR
+-FactionManager_USxUSSR
 
 Use the appropriate Faction Manager for your scenario and its factions.
+
 
 3. AIWorld — VERY IMPORTANT
 
 Your scenario must contain an appropriate:
 
-SCR_AIWorld
+-SCR_AIWorld
 
 for the terrain/map being used.
 
@@ -61,11 +64,11 @@ Do not blindly copy the Arland AIWorld into another terrain.
 
 For example, our Arland test scenario uses:
 
-SCR_AIWorld_Arland
+-SCR_AIWorld_Arland
 
 The AIWorld needs the correct navigation data for that terrain.
 
-Navmesh is critical
+-Navmesh is critical
 
 During testing, AI could spawn, detect enemies and fight even though the Soldiers navigation world had no navmesh file assigned.
 
@@ -77,8 +80,8 @@ No navmesh file specified! Will initialize empty navmesh world.
 
 For our Arland test scenario, the Soldiers NavmeshWorldComponent was configured with:
 
-Navmesh Project: Soldiers
-Navmesh File: CTI_Campaign_Arland.nmn
+-Navmesh Project: Soldiers
+-Navmesh File: CTI_Campaign_Arland.nmn
 
 Once the correct navmesh was assigned, TLL's Forced Move leash worked properly.
 
@@ -90,29 +93,31 @@ If AI spawn and shoot but fail to properly navigate or return when the leash act
 
 Custom terrains will need navigation data appropriate for that terrain.
 
+
 4. Player Spawning / Loadout Manager
 
 If the scenario needs normal player spawning, make sure the scenario has the appropriate:
 
-SpawnPoint
-LoadoutManager
+-SpawnPoint
+-LoadoutManager
 
 and that the Loadout Manager actually supports the factions being used.
 
 For example, our vanilla US/USSR test scenario uses:
 
-SpawnPoint_US
-LoadoutManager_USxUSSR
+-SpawnPoint_US
+-LoadoutManager_USxUSSR
 
 Using only LoadoutManager_Base caused player spawning problems during our testing.
 
 This isn't the TLL AI respawn system itself, but it is required for a correctly configured playable scenario.
 
+
 5. Perception Manager
 
 The tested scenario also contains:
 
-PerceptionManager
+-PerceptionManager
 
 This should be part of the scenario's normal AI/gameplay infrastructure.
 
@@ -120,13 +125,13 @@ Recommended Scenario Hierarchy
 
 A basic test scenario may look something like:
 
-FactionManager
-GameMode_Plain
-PerceptionManager
-SCR_AIWorld_<YourMap>
-SpawnPoint
-LoadoutManager
-TLL_SpawnArea
+-FactionManager
+-GameMode_Plain
+-PerceptionManager
+-SCR_AIWorld_<YourMap>
+-SpawnPoint
+-LoadoutManager
+-TLL_SpawnArea
 
 The exact prefab names will depend on the map, factions and scenario.
 
@@ -134,7 +139,7 @@ Using TLL_SpawnArea
 
 Place:
 
-TLL_SpawnArea.et
+-TLL_SpawnArea.et
 
 into your scenario.
 
@@ -152,27 +157,27 @@ Select the SlotAI inside the placed TLL Spawn Area.
 
 Find:
 
-SCR_ScenarioFrameworkSlotAI
+-SCR_ScenarioFrameworkSlotAI
 
 Then change:
 
-Object To Spawn
+-Object To Spawn
 
 to the AI character prefab you want that SlotAI to spawn.
 
 For example, this could be a vanilla rifleman or an AI character supplied by another mod.
 
-Important
+!!!Important!!!
 
 TLL Spawn System does not require the spawn system itself to contain every possible AI prefab.
 
 The scenario maker chooses the desired AI through:
 
-Object To Spawn
+-Object To Spawn
 
 This makes the system reusable with different factions, units and compatible modded AI character prefabs.
 
-Adding More AI to an Area
+-Adding More AI to an Area
 
 If you want several independently spawned AI, duplicate the existing SlotAI.
 
@@ -199,40 +204,40 @@ Respawn Settings
 
 Each SlotAI contains:
 
-TLL_AIRespawnComponent
+-TLL_AIRespawnComponent
 
 The important setting is:
 
-Respawn Delay
+-Respawn Delay
 
 This controls how long the system waits after that AI/group has been eliminated.
 
 For example:
 
-Respawn Delay: 600
+-Respawn Delay: 600
 
-means a 600-second / 10-minute cooldown.
+-means a 600-second / 10-minute cooldown.
 
 For development testing we used:
 
-Respawn Delay: 15
+-Respawn Delay: 15
 
 Once the cooldown expires, the SlotAI waits until a player is within the parent Area's activation range before restoring the spawn.
 
 If the player is already inside that range when the timer finishes, restoration can happen immediately.
 
-Dynamic Despawn
+-Dynamic Despawn
 
 The parent TLL Spawn Area uses Scenario Framework Dynamic Despawn.
 
 Our default/test configuration is:
 
-Dynamic Despawn: ON
-Dynamic Despawn Range: 500
+-Dynamic Despawn: ON
+-Dynamic Despawn Range: 500
 
 This means AI can be removed when players move sufficiently far away and restored when players return.
 
-Dynamic despawn is NOT death
+--Dynamic despawn is NOT death--
 
 TLL specifically distinguishes between:
 
@@ -248,34 +253,36 @@ When players return, Scenario Framework can restore those AI normally.
 
 This behavior has been tested successfully.
 
+
 AI Leash System
 
 Each SlotAI can optionally keep its spawned AI near its original spawn location.
 
 Default/test settings:
 
-Leash Enabled: ON
-Leash Radius: 50
-Return Release Radius: 10
-How it works
+-Leash Enabled: ON
+-Leash Radius: 50
+-Return Release Radius: 10
+
+How it works:
 
 While the AI remains within 50 m of its SlotAI position, TLL leaves it alone.
 
 The AI can:
 
-detect enemies
-engage
-seek cover
-reposition
-use normal autonomous AI behavior
+-detect enemies
+-engage
+-seek cover
+-reposition
+-use normal autonomous AI behavior
 
 If the AI moves farther than:
 
-50 m
+-50 m
 
 TLL creates a temporary:
 
-AIWaypoint_ForcedMove
+-AIWaypoint_ForcedMove
 
 at the SlotAI spawn location.
 
@@ -283,7 +290,7 @@ The AI is ordered back toward its spawn area.
 
 Once it returns within:
 
-10 m
+-10 m
 
 the temporary Forced Move waypoint is removed.
 
@@ -291,7 +298,7 @@ The AI then returns to normal autonomous behavior.
 
 So the leash is not a permanent waypoint. It only intervenes when the AI exceeds the configured distance.
 
-Why Forced Move Is Used
+Why Forced Move Is Used?
 
 A normal Move waypoint was tested during development.
 
@@ -299,7 +306,7 @@ The AI could continue following autonomous/combat behavior rather than reliably 
 
 TLL therefore uses:
 
-AIWaypoint_ForcedMove.et
+-AIWaypoint_ForcedMove.et
 
 for the temporary return order.
 
