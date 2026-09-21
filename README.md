@@ -6,32 +6,6 @@ It is designed for scenario makers who want to place preconfigured AI spawn area
 
 The system handles AI lifecycle management automatically while allowing the spawned AI to retain normal autonomous combat behavior.
 
-Latest Loot System Update
-
-The TLL loot system now includes functional key spawning, key-required containers, food and drink spawning, and searchable vegetable crops.
-
-Key Spawning & Key-Required Containers
-
-Key spawning is now working and functional.
-
-Key-required loot containers are configured for both vanilla and modded containers.
-
-Key containers can be configured around the TLL loot tier system.
-
-Tier 5 key-required containers are not present on the vanilla map.
-
-Scenario makers who want to provide Tier 5 key-required loot must place and configure the modded container included with the TLL mod for Tier 5 loot and key-required access.
-
-Food, Drinks & Vegetable Crops
-
-Food and drink spawning is now functional.
-
-Food can spawn through the TLL loot system in vanilla refrigerators and kitchen furniture.
-
-Existing vegetable crops found around house backyards are now searchable/lootable.
-
-Searchable crops can provide their corresponding vegetables through their configured forced-loot pools.
-
 Features
 
 Scenario Framework AI spawning
